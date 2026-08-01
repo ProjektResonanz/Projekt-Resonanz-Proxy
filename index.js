@@ -19,9 +19,13 @@ app.post('/chat', async (req, res) => {
             body: JSON.stringify(req.body)
         });
         const data = await response.json();
+        // Wenn DeepSeek einen Fehler meldet, geben wir ihn detailliert weiter
+        if (!response.ok) {
+            return res.status(response.status).json(data);
+        }
         res.json(data);
     } catch (err) {
-        res.status(500).json({ error: 'Proxy-Fehler' });
+        res.status(500).json({ error: 'Proxy-Fehler', details: err.message });
     }
 });
 
